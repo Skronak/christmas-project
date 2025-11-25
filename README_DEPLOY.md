@@ -27,6 +27,8 @@
 ## 4) Tester localement (optionnel)
 
 - Installe `wrangler` si tu veux tester Functions / D1 localement, et suis la doc Cloudflare pour `wrangler pages dev`.
+- npm run build
+- wrangler pages dev ./dist
 
 ## 5) Mises en garde
 

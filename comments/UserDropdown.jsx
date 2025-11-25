@@ -1,11 +1,6 @@
 import React from 'react';
+import {TextField} from "@mui/material";
 
-/**
- * Composant UserDropdown
- * Props:
- * - users: liste de noms (ex: ['Alice', 'Bob', 'Charlie'])
- * - onSelect: fonction à appeler lors de la sélection d'un utilisateur
- */
 export default function UserDropdown({ userList, onSelect }) {
     const handleChange = (e) => {
         const selectedUser = e.target.value;
@@ -13,12 +8,24 @@ export default function UserDropdown({ userList, onSelect }) {
     };
 
     return (
-        <select onChange={handleChange} style={{ padding: '6px', fontSize: '14px' }}>
-            <option value=""></option>
-            {userList.map((user, index) => (
-                <option key={index} value={user}>{user}</option>
+        <TextField
+            id="select-user"
+            select
+            label="Selectionner une valeur"
+            onChange={handleChange}
+            slotProps={{
+                select: {
+                    native: true,
+                },
+            }}
+        >
+            <option key={0} value={0}></option>
+            {userList.map((user) => (
+                <option key={user.id} value={user.name}>
+                    {user.name}
+                </option>
             ))}
-        </select>
+        </TextField>
     );
 }
 

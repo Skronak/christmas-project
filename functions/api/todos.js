@@ -60,19 +60,18 @@ export const onRequestDelete = async ({ request, env }) => {
 }
 
 export async function onRequestPut({ request, env, params }) {
-    const id = params.id;
     const body = await request.json().catch(() => ({}));
-    const { userId, name, comment } = body;
+    const { id, userId, name, comment } = body;
     if (!userId || !name) return new Response(JSON.stringify({ message: "userId and name required" }), { status: 400 });
 
     // Vérifie que le todo appartient bien à l'utilisateur
-    const check = await env.DB.prepare("SELECT id FROM todos WHERE id = ? AND userId = ?")
+    const check = await env.DB.prepare("SELECT id FROM liste WHERE id = ? AND userId = ?")
         .bind(id, userId)
         .first();
     if (!check) return new Response(JSON.stringify({ message: "Not found or not allowed" }), { status: 404 });
 
-    await env.DB.prepare("UPDATE todos SET name = ?, comment=? WHERE id = ? AND userId = ?")
-        .bind(name, id, comment, userId)
+    await env.DB.prepare("UPDATE liste SET name = ?, comment=? WHERE id = ? AND userId = ?")
+        .bind(name, comment, id, userId)
         .run();
 
     return new Response(JSON.stringify({ success: true, id, name, comment }), { status: 200 });

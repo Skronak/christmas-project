@@ -1,5 +1,6 @@
 import React from 'react'
 import {useState} from 'react'
+import {Button, TextField} from "@mui/material";
 
 export default function TodoItem({todo, onDelete, onEdit}) {
     const [isEdit, setIsEdit] = useState(false);
@@ -23,33 +24,38 @@ export default function TodoItem({todo, onDelete, onEdit}) {
 
     return (
         <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 0.5fr 0.5fr',
             alignItems: 'center',
             padding: '8px 0',
             borderBottom: '1px solid #ccc'
         }}>
             {isEdit ? (
-                    <p>
-                        <input value={name} onChange={(evt)=>setName(evt.target.value)}></input>
-                        <input value={comment} onChange={(evt)=>setComment(evt.target.value)}></input>
-                    </p>
-                ) :
-                <p>
-                    <span>{todo.name}</span>
-                    <span>{todo.comment}</span>
-                </p>
-
+                <>
+                    <TextField id="outlined-basic" label="nom" variant="outlined" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField id="outlined-basic" label="commentaire" variant="outlined" value={comment} onChange={(e) => setComment(e.target.value)} />
+                    <div style={{ height: '100%' }}>
+                        <Button variant="contained" style={{ height: '100%' }} color="success" onClick={validerEdit}>
+                            valider
+                        </Button>
+                        <Button variant="contained" color="error" style={{ height: '100%' }} onClick={annulerEdit}>
+                            Annuler
+                        </Button>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div>{todo.name}</div>
+                    <div>{todo.comment}</div>
+                    <Button variant="contained" onClick={toggleEdit}>
+                        Modifier
+                    </Button>
+                </>
+            )
             }
-            <div>
-                {isEdit ? <p>
-                    <button onClick={validerEdit}>valider</button>
-                    <button onClick={annulerEdit}>annuler</button>
-                </p> :
-                    <button onClick={toggleEdit} style={{marginRight: 6}}>Modifier</button>
-                }
-                <button onClick={() => onDelete(todo.id)}>Supprimer</button>
-            </div>
+            <Button variant="contained" color="error" onClick={() => onDelete(todo.id)}>
+                Supprimer
+            </Button>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Login from './pages/Login'
 import MyList from './pages/MyList'
+import MainLayout from "./pages/MainLayout";
 
 function App() {
     const [user, setUser] = React.useState(() => {
@@ -17,6 +18,7 @@ function App() {
     }, [user])
 
     if (!user) return <Login onLogin={setUser} />
-    return <MyList user={user} onLogout={() => setUser(null)} />
+    return <MainLayout user={user} onLogout={() => setUser(null)} />
 }
+
 export default App

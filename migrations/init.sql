@@ -17,6 +17,7 @@ INSERT OR IGNORE INTO users(id, name) VALUES
 (5, 'Fred');
 (6, 'Arthur');
 (7, 'Gabriel');
+(8, 'Maman Fred');
 
 -- Quelques todos exemples
 INSERT OR IGNORE INTO liste(id, userId, name) VALUES
