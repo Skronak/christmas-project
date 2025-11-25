@@ -1,0 +1,6 @@
+name = "noel"
+main = "function/index.js"
+compatibility_date = "2025-11-24"
+
+d1_databases = [
+    { binding = "DB", database_name = "noel", database_id = "generated-uuid-5678" }]
