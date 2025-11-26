@@ -7,16 +7,17 @@ import MaListePage from "./MaListePage";
 import PersonIcon from '@mui/icons-material/Person';
 import {allUser} from "../utils/allUser";
 import {getItems} from "../api";
+import OtherListePage from "./OtherListePage";
 
 export default function MainLayout({user, onLogout}) {
     const allUsers = allUser;
     const [activeTab, setActiveTab] = React.useState(0);
     const [currentUserList, setCurrentUserList] = React.useState([])
-    const [giftOtherUsers, setGiftOtherUsers] = React.useState([])
+    const [otherUsersList, setOtherUsersList] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const [loadingOther, setLoadingOther] = React.useState(false)
 
-    async function loadCurrentGifts() {
+    async function loadCurrentUserList() {
         setLoading(true)
         try {
             const res = await getItems(user.id, false)
@@ -36,15 +37,15 @@ export default function MainLayout({user, onLogout}) {
         return allUsers.filter(u => u.id !== user.id);
     }
 
-    async function loadOtherGifts() {
+    async function loadOtheruserList() {
         setLoadingOther(true)
         try {
-            const data = await getItems(user.id, true)
+            const data = await getItems(user.id, true);
             // const data = [
             //     {id: 3, userId: 2, name: "Plante", comment: "oui", done: 0, doneBy: 0, doneComment: ""},
             //     {id: 4, userId: 2, name: "jardin suspendu", comment: "", done: 0, doneBy: 0, doneComment: ""},
             // ]
-            setGiftOtherUsers(data)
+            setOtherUsersList(data.filter((data)=>user!==data.id))
         } catch (err) {
             setError(err.message)
         } finally {
@@ -53,8 +54,8 @@ export default function MainLayout({user, onLogout}) {
     }
 
     React.useEffect(() => {
-        loadCurrentGifts();
-        loadOtherGifts();
+        loadCurrentUserList();
+        loadOtheruserList();
     }, [])
 
     const handleChange = (event, newValue) => {
@@ -63,6 +64,10 @@ export default function MainLayout({user, onLogout}) {
 
     const currentUserListeCallBack = (list) => {
         setCurrentUserList(list);
+    }
+
+    const otherUserListeCallBack = (list) => {
+        setOtherUsersList(list);
     }
 
     return (
@@ -82,10 +87,14 @@ export default function MainLayout({user, onLogout}) {
                                     {getOtherUsers().map(userName => <Tab
                                         label={`Liste de ${userName.name}`} value={userName.id}/>)}
                                 </TabList>
-                                <TabPanel value={0}><MaListePage user={user} currentList={currentUserList} isListOwner={true} updateCB={currentUserListeCallBack}/></TabPanel>
-                                {getOtherUsers().map(otherUser => <TabPanel value={otherUser.id}>
-                                    {/*<MaListePage user={otherUser} currentList={giftOtherUsers.filter(gift=>gift.userId===otherUser.id)} isListOwner={false}/>*/}
-                                </TabPanel>)}
+                                <TabPanel value={0}>
+                                    <MaListePage user={user} currentList={currentUserList} updateCB={currentUserListeCallBack}/>
+                                </TabPanel>
+                                {getOtherUsers().map(otherUser =>
+                                    <TabPanel value={otherUser.id}>
+                                    <OtherListePage user={otherUser} currentList={otherUsersList} isListOwner={false} updateCB={otherUserListeCallBack}/>
+                                    </TabPanel>
+                                )}
                             </Box>
                         </TabContext>
                     </Box>

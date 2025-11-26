@@ -2,7 +2,7 @@ import React, {useRef} from 'react'
 import {useState} from 'react'
 import {Button, TextField} from "@mui/material";
 
-export default function TodoItemOther({item, onEdit}) {
+export default function RowOther({item, onEdit}) {
     const [isEdit, setIsEdit] = useState(false);
     const [otherItem, setOtherItem] = useState();
 

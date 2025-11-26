@@ -3,8 +3,9 @@ import {addItem, deleteItem, updateItems} from '../api'
 import Row from '../components/Row'
 import {Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField} from "@mui/material";
 import Paper from "@mui/material/Paper";
+import RowOther from "../components/RowOther";
 
-export default function MaListePage({user, currentList, updateCB}) {
+export default function OtherListePage({user, currentList, isListOwner, updateCB}) {
     const [name, setName] = useState('')
     const [comment, setComment] = useState('')
     const [error, setError] = useState(null)
@@ -14,28 +15,6 @@ export default function MaListePage({user, currentList, updateCB}) {
     useEffect(() => {
         updateCB(currentItems);
     }, [currentItems]);
-
-    async function handleAdd(e) {
-        e.preventDefault()
-        if (!name.trim()) return
-        try {
-            const newTodo = await addItem(user.id, name.trim(), comment)
-            setCurrentItems((t) => [...t, newTodo]);
-            setName('');
-            setComment('');
-        } catch (err) {
-            console.log(err.message)
-        }
-    }
-
-    async function handleDelete(id, name, comment) {
-        try {
-            await deleteItem(user.id, id);
-            setCurrentItems((item) => item.filter((x) => x.id !== id))
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     async function handleSubmit(id, name, comment) {
         try {
@@ -51,25 +30,8 @@ export default function MaListePage({user, currentList, updateCB}) {
     }
 
     return (
-        <>
-            <Box sx={{
-                borderBottom: 1,
-                borderColor: 'divider',
-                marginTop: 1,
-                paddingBottom: 3,
-                marginBottom: 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-            }}>
-                <p>Nouvel élément</p>
-                <TextField size="small" id="outlined-basic" label="nom" variant="outlined" value={name}
-                           onChange={(e) => setName(e.target.value)}/>
-                <TextField size="small" id="outlined-basic" label="commentaire" variant="outlined"
-                           value={comment}
-                           onChange={(e) => setComment(e.target.value)}/>
-                <Button type="submit" variant="contained" onClick={handleAdd}>Ajouter</Button>
-            </Box>
+        <div>
+            {error && <div style={{color: 'red'}}>{error}</div>}
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 650, tableLayout: "fixed"}} aria-label="simple table">
                     <TableHead sx={{'& .MuiTableCell-root': {fontWeight: 'bold'}}}>
@@ -81,11 +43,11 @@ export default function MaListePage({user, currentList, updateCB}) {
                     </TableHead>
                     <TableBody>
                         {currentItems.map((t) => (
-                            <Row key={t.id} item={t} onEdit={handleSubmit} onDelete={handleDelete}/>
+                            <RowOther key={t.id} item={t} onEdit={handleSubmit}/>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-        </>
+        </div>
     )
 }

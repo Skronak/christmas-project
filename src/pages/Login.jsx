@@ -13,8 +13,8 @@ export default function Login({onLogin}) {
         setError(null)
         setLoading(true)
         try {
-            const data = await loginByName(name.trim())
-            // const data = {id: 1, name: "Guillaume"};
+            // const data = await loginByName(name.trim())
+            const data = {id: 1, name: "Guillaume"};
             onLogin(data)
         } catch (err) {
             setError(err.message)
