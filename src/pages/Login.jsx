@@ -1,14 +1,13 @@
 import React from 'react'
-import {loginByName} from '../api'
 import UserDropdown from "../../comments/UserDropdown";
 import {Grid, Typography} from "@mui/material";
-import Scrambler from "../components/Scrambler";
+import {ScrambledTitle} from "../components/ScrambledTitle";
 import {allUser} from "../utils/allUser";
+import {loginByName} from "../api";
 
 export default function Login({onLogin}) {
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(null)
-    const users = allUser;
 
     async function handleSubmit(name) {
         setError(null)
@@ -27,20 +26,20 @@ export default function Login({onLogin}) {
     return (
         <Grid
             container
-            flexDirection={"column"}
+            flexDirection="column"
             height={"100vh"}
             alignItems={"center"}
             paddingTop={"5%"}
         >
-            <Grid item flex={2}>
-            <Typography><Scrambler/></Typography>
-            </Grid>
+            <h1>
+                <ScrambledTitle/>
+            </h1>
             <Grid container flex={8} flexDirection={"column"} alignItems={"center"}>
-                <h1>Je suis</h1>
+                <h2>Je suis</h2>
                 <form onSubmit={handleSubmit}>
                     {loading && <p>Connexion... </p>}
                     {error && <p style={{color: 'red'}}>{error}</p>}
-                    <UserDropdown userList={users} onSelect={handleSubmit}></UserDropdown>
+                    <UserDropdown userList={allUser} onSelect={handleSubmit}></UserDropdown>
                 </form>
             </Grid>
         </Grid>

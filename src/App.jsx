@@ -1,7 +1,7 @@
 import React from 'react'
 import Login from './pages/Login'
-import MyList from './pages/MyList'
 import MainLayout from "./pages/MainLayout";
+import {Box} from "@mui/material";
 
 function App() {
     const [user, setUser] = React.useState(() => {
@@ -17,8 +17,13 @@ function App() {
         else localStorage.removeItem('user')
     }, [user])
 
-    if (!user) return <Login onLogin={setUser} />
-    return <MainLayout user={user} onLogout={() => setUser(null)} />
+    return (
+        <Box sx={{flexGrow: 1}}>
+            {!user ? <Login onLogin={setUser}/> : (
+                <MainLayout user={user} onLogout={() => setUser(null)}/>)
+            }
+        </Box>
+    )
 }
 
 export default App

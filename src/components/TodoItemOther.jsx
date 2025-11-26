@@ -1,8 +1,9 @@
 import React, {useRef} from 'react'
 import {useState} from 'react'
-import {Button, TextField, Checkbox} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 
 export default function TodoItemOther({item, onEdit}) {
+    const [isEdit, setIsEdit] = useState(false);
     const [otherItem, setOtherItem] = useState();
 
     React.useEffect(() => {
@@ -19,6 +20,10 @@ export default function TodoItemOther({item, onEdit}) {
         toggleEdit();
     }
 
+    const toggleEdit = () => {
+        setIsEdit(!isEdit);
+    }
+
     const handleChange = (evt) => {
         const {name, value} = evt.target;
         setOtherItem({
@@ -27,14 +32,6 @@ export default function TodoItemOther({item, onEdit}) {
             }
         )
     }
-
-    const handleChangeCheckbox = (event) => {
-        setOtherItem({
-                ...otherItem,
-                done: +event.target.checked
-            }
-        )
-    };
 
     return (
         <div style={{
@@ -48,24 +45,24 @@ export default function TodoItemOther({item, onEdit}) {
                 <>
                     <div>{item.name}</div>
                     <div>{item.comment}</div>
-                    <Checkbox
-                        name="name"
-                        checked={!!otherItem.done}
-                        onChange={handleChangeCheckbox}
-                        slotProps={{
-                            input: { 'aria-label': 'controlled' },
-                        }}
-                    />
+                    <TextField id="outlined-basic" label="Fait" variant="outlined" value={otherItem.done} name="done"
+                               onChange={handleChange}/>
                     <TextField id="outlined-basic" label="Commentaire" variant="outlined" value={otherItem.doneComment}
                                name="doneComment"
                                onChange={handleChange}/>
 
+                    {isEdit ? (<>
                         <Button variant="contained" style={{height: '100%'}} color="success" onClick={validerEdit}>
                             valider
                         </Button>
                         <Button variant="contained" color="error" style={{height: '100%'}} onClick={annulerEdit}>
                             Annuler
                         </Button>
+                    </>) : (
+                        <Button variant="contained" onClick={toggleEdit}>
+                            Modifier
+                        </Button>)
+                    }
                 </>
             ) : null}
         </div>

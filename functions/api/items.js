@@ -8,7 +8,7 @@ export const onRequestGet = async ({ request, env }) => {
         if (all==='true') { // tout sauf liste utilisateur courant
             stmt = env.DB.prepare('SELECT id, userId, name, comment, done, doneby, doneComment FROM liste WHERE userId <> ?');
         } else {
-            stmt = env.DB.prepare('SELECT id, userId, name FROM liste WHERE userId = ? ORDER BY rowid');
+            stmt = env.DB.prepare('SELECT id, userId, name, comment FROM liste WHERE userId = ? ORDER BY rowid');
         }
         const result = await stmt.bind(userId).all()
         const rows = result.results || []
@@ -39,7 +39,7 @@ export const onRequestPost = async ({ request, env }) => {
 export const onRequestDelete = async ({ request, env }) => {
     try {
         if (request.method !== 'DELETE') return new Response(null, { status: 405 })
-        const body = await request.json().catch(() => ({}))
+        const body = await request.json();
         const id = body.id
         const userId = body.userId
         if (!userId) return new Response(JSON.stringify({ message: 'userId required' }), { status: 400 })
@@ -59,11 +59,14 @@ export const onRequestDelete = async ({ request, env }) => {
     }
 }
 
-export async function onRequestPut({ request, env, params }) {
-    const body = await request.json().catch(() => ({}));
+export async function onRequestPut({ request, env }) {
+    console.log(request.body);
+
+    const body = await request.json();
     const { id, userId, name, comment } = body;
     if (!userId || !name) return new Response(JSON.stringify({ message: "userId and name required" }), { status: 400 });
-
+console.log(name);
+console.log(comment);
     // Vérifie que le todo appartient bien à l'utilisateur
     const check = await env.DB.prepare("SELECT id FROM liste WHERE id = ? AND userId = ?")
         .bind(id, userId)
