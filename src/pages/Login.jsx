@@ -14,7 +14,7 @@ export default function Login({onLogin}) {
         setError(null)
         setLoading(true)
         try {
-            // const data = await loginByName(name.trim())
+            // const data = await loginByName(name.trim()) todo authentification
             const data = allUsers.filter(u => +userId === u.id)[0];
             onLogin(data);
         } catch (err) {
