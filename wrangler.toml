@@ -1,8 +1,6 @@
 name = "projet-noel"
 compatibility_date = "2025-11-24"
-
 pages_build_output_dir = "./dist"
-pages_project_name = "projet-noel"
 
 [[d1_databases]]
 binding = "DB"
