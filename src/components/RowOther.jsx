@@ -1,70 +1,54 @@
-import React, {useRef} from 'react'
-import {useState} from 'react'
-import {Button, TextField} from "@mui/material";
+import { useState, useEffect } from "react";
+import { TableRow, TableCell, Button, ButtonGroup } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import CustomTableCell from "./CustomTableCell";
 
-export default function RowOther({item, onEdit}) {
+export default function RowOther({ item, onSubmit, onDelete, isOwner }) {
     const [isEdit, setIsEdit] = useState(false);
-    const [otherItem, setOtherItem] = useState();
+    const [row, setRow] = useState(item);
 
-    React.useEffect(() => {
-        setOtherItem(item);
-    }, [])
-
-    const validerEdit = () => {
-        toggleEdit();
-        // onEdit(todo.id, name ? name.trim() : '', comment ? comment.trim() : '');
-    }
-
-    const annulerEdit = () => {
-        setOtherItem(item);
-        toggleEdit();
-    }
-
-    const toggleEdit = () => {
-        setIsEdit(!isEdit);
-    }
+    useEffect(() => setRow(item), [item]);
 
     const handleChange = (evt) => {
-        const {name, value} = evt.target;
-        setOtherItem({
-                ...otherItem,
-                [name]: value
-            }
-        )
-    }
+        const { name, value, type, checked } = evt.target;
+        setRow(prev => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value
+        }));
+    };
+
+    const validateEdit = () => {
+        setIsEdit(false);
+        onSubmit(row);
+    };
+
+    const cancelEdit = () => {
+        setRow(item);
+        setIsEdit(false);
+    };
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 0.5fr 0.5fr',
-            alignItems: 'center',
-            padding: '8px 0',
-            borderBottom: '1px solid #ccc'
-        }}>
-            {otherItem ? (
-                <>
-                    <div>{item.name}</div>
-                    <div>{item.comment}</div>
-                    <TextField id="outlined-basic" label="Fait" variant="outlined" value={otherItem.done} name="done"
-                               onChange={handleChange}/>
-                    <TextField id="outlined-basic" label="Commentaire" variant="outlined" value={otherItem.doneComment}
-                               name="doneComment"
-                               onChange={handleChange}/>
-
-                    {isEdit ? (<>
-                        <Button variant="contained" style={{height: '100%'}} color="success" onClick={validerEdit}>
-                            valider
-                        </Button>
-                        <Button variant="contained" color="error" style={{height: '100%'}} onClick={annulerEdit}>
-                            Annuler
-                        </Button>
-                    </>) : (
-                        <Button variant="contained" onClick={toggleEdit}>
-                            Modifier
-                        </Button>)
-                    }
-                </>
-            ) : null}
-        </div>
+        <TableRow>
+            <CustomTableCell onChange={handleChange} name="name" value={row.name} isEdit={isOwner && isEdit} />
+            <CustomTableCell onChange={handleChange} name="comment" value={row.comment} isEdit={isOwner && isEdit} />
+            {!isOwner && <CustomTableCell onChange={handleChange} name="done" value={row.done} isEdit={isEdit} />}
+            {!isOwner && <CustomTableCell onChange={handleChange} name="doneComment" value={row.doneComment} isEdit={isEdit} />}
+            <TableCell style={{ width: 120 }}>
+                {isEdit ? (
+                    <ButtonGroup>
+                        <Button variant="contained" color="success" onClick={validateEdit}><CheckIcon /></Button>
+                        <Button variant="contained" color="error" onClick={cancelEdit}><ClearIcon /></Button>
+                    </ButtonGroup>
+                ) : (
+                    <ButtonGroup>
+                        <Button variant="contained" onClick={() => setIsEdit(true)}><EditIcon /></Button>
+                        {isOwner && <Button variant="contained" color="error" onClick={() => onDelete(row.id)}><DeleteIcon /></Button>}
+                    </ButtonGroup>
+                )}
+            </TableCell>
+        </TableRow>
     );
 }

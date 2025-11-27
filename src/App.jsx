@@ -1,7 +1,7 @@
 import React from 'react'
 import Login from './pages/Login'
-import MainLayout from "./pages/MainLayout";
 import {Box} from "@mui/material";
+import MainLayout from "./pages/MainLayout";
 
 function App() {
     const [user, setUser] = React.useState(() => {

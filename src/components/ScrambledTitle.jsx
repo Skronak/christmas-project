@@ -41,7 +41,7 @@ export const ScrambledTitle = () => {
         },
     })
 
-    return index===11? (
+    return index===12? (
         <h1 className="intro" aria-label={texts[index]} ref={ref} onClick={replay}/>):(
         <p className="intro" aria-label={texts[index]} ref={ref} onClick={replay} />)
 }

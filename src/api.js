@@ -16,8 +16,8 @@ export async function loginByName(name) {
     return res.json()
 }
 
-export async function getItems(userId, all) {
-    const res = await fetch(`${apiBase}/items?userId=${encodeURIComponent(userId)}&all=${all}`)
+export async function getItems() {
+    const res = await fetch(`${apiBase}/items`)
     if (!res.ok) throw new Error('Failed to load items')
     return res.json()
 }
@@ -42,11 +42,11 @@ export async function deleteItem(userId, id) {
     return res.json()
 }
 
-export async function updateItems(user, id, name, comment) {
+export async function updateItems(item) {
     const res = await fetch(`/api/items`, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: id, userId: user.id, name: name, comment: comment})
+        body: JSON.stringify(item)
     });
     if (!res.ok) throw new Error('Failed to update todo')
     return res.json();

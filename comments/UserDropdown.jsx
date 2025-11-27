@@ -3,8 +3,8 @@ import {TextField} from "@mui/material";
 
 export default function UserDropdown({ userList, onSelect }) {
     const handleChange = (e) => {
-        const selectedUser = e.target.value;
-        if (onSelect) onSelect(selectedUser);
+        const userId = e.target.value;
+        if (onSelect) onSelect(userId);
     };
 
     return (
@@ -21,7 +21,7 @@ export default function UserDropdown({ userList, onSelect }) {
         >
             <option key={0} value={0}></option>
             {userList.map((user) => (
-                <option key={user.id} value={user.name}>
+                <option key={user.id} value={user.id}>
                     {user.name}
                 </option>
             ))}

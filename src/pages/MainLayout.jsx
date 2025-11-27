@@ -1,104 +1,121 @@
-import React from 'react'
-import {AppBar, Box, Button, Tab, Toolbar, Typography} from "@mui/material";
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import MaListePage from "./MaListePage";
-import PersonIcon from '@mui/icons-material/Person';
-import {allUser} from "../utils/allUser";
-import {getItems} from "../api";
+import React, {useState, useEffect} from "react";
+import {
+    Box,
+    AppBar,
+    Toolbar,
+    Drawer,
+    CssBaseline,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Divider,
+    Button
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
+import EditIcon from "@mui/icons-material/Edit";
+import RedeemIcon from "@mui/icons-material/Redeem";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 import OtherListePage from "./OtherListePage";
+import {allUsers, drawerWidth, itemMock} from "../utils/data";
+import {exportToCSV} from "../utils/export";
+import {getItems} from "../api";
 
 export default function MainLayout({user, onLogout}) {
-    const allUsers = allUser;
-    const [activeTab, setActiveTab] = React.useState(0);
-    const [currentUserList, setCurrentUserList] = React.useState([])
-    const [otherUsersList, setOtherUsersList] = React.useState([])
-    const [loading, setLoading] = React.useState(false)
-    const [loadingOther, setLoadingOther] = React.useState(false)
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [allItemList, setAllItemList] = useState([]);
+    const [currentUserList, setCurrentUserList] = useState([]);
+    const [otherUsersList, setOtherUsersList] = useState([]);
+    const [selectedMenuUserId, setSelectedMenuUserId] = useState(user.id);
 
-    async function loadCurrentUserList() {
-        setLoading(true)
-        try {
-            const res = await getItems(user.id, false)
-            // const data = [
-            //     {id: 1, userId: 1, name: "Chausson", comment: "cest fait", done: 0, doneBy: 0, doneComment: ""},
-            //     {id: 2, userId: 1, name: "patin a glace", comment: "", done: 0, doneBy: 0, doneComment: ""},
-            // ]
-            setCurrentUserList(res);
-        } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
-    }
+    useEffect(() => {
+        getItems().then(
+            res => {
+                setAllItemList(res);
+                setCurrentUserList(res.filter(r => r.userId === user.id));
+                setOtherUsersList(res.filter(r => r.userId !== user.id));
+            });
+    }, []);
 
-    const getOtherUsers = () => {
-        return allUsers.filter(u => u.id !== user.id);
-    }
+    useEffect(() => {
+        setCurrentUserList(allItemList.filter(r => r.userId === user.id));
+        setOtherUsersList(allItemList.filter(r => r.userId !== user.id));
+    }, [user.id]);
 
-    async function loadOtheruserList() {
-        setLoadingOther(true)
-        try {
-            const data = await getItems(user.id, true);
-            // const data = [
-            //     {id: 3, userId: 2, name: "Plante", comment: "oui", done: 0, doneBy: 0, doneComment: ""},
-            //     {id: 4, userId: 2, name: "jardin suspendu", comment: "", done: 0, doneBy: 0, doneComment: ""},
-            // ]
-            setOtherUsersList(data.filter((data)=>user!==data.id))
-        } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoadingOther(false)
-        }
-    }
+    const currentUserListeCallBack = list => setCurrentUserList(list);
+    const otherUserListeCallBack = list => setOtherUsersList(list);
+    const getOtherUsers = () => allUsers.filter(u => u.id !== user.id);
 
-    React.useEffect(() => {
-        loadCurrentUserList();
-        loadOtheruserList();
-    }, [])
-
-    const handleChange = (event, newValue) => {
-        setActiveTab(newValue);
-    };
-
-    const currentUserListeCallBack = (list) => {
-        setCurrentUserList(list);
-    }
-
-    const otherUserListeCallBack = (list) => {
-        setOtherUsersList(list);
-    }
+    const drawer = (
+        <div>
+            <Toolbar/>
+            <Divider/>
+            <List>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => exportToCSV(allItemList, "liste_cadeau.csv")}>
+                        <ListItemIcon><FileDownloadIcon/></ListItemIcon>
+                        <ListItemText primary="Export CSV"/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => setSelectedMenuUserId(user.id)}>
+                        <ListItemIcon><EditIcon/></ListItemIcon>
+                        <ListItemText primary="Ma liste"/>
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider/>
+            <List>
+                {getOtherUsers().map(u => (
+                    <ListItem key={u.id} disablePadding>
+                        <ListItemButton onClick={() => setSelectedMenuUserId(u.id)}>
+                            <ListItemIcon><RedeemIcon/></ListItemIcon>
+                            <ListItemText primary={u.name}/>
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </div>
+    );
 
     return (
-        <>
-        <AppBar position="static" sx={{ backgroundColor: '#F54927' }}>
-            <Toolbar>
-                <PersonIcon/>{user.name}<Button variant="contained" onClick={onLogout} sx={{ ml: 'auto', backgroundColor: '#9C2007'}} >Me déconnecter</Button>
-            </Toolbar>
-        </AppBar>
-            {loading || loadingOther ? "chargement" :
-                (
-                    <Box sx={{width: '100%', typography: 'body1'}}>
-                        <TabContext value={activeTab}>
-                            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                                <TabList onChange={handleChange} aria-label="liste" variant="scrollable">
-                                    <Tab label="Modifier ma liste" value={0}/>
-                                    {getOtherUsers().map(userName => <Tab
-                                        label={`Liste de ${userName.name}`} value={userName.id}/>)}
-                                </TabList>
-                                <TabPanel value={0}>
-                                    <MaListePage user={user} currentList={currentUserList} updateCB={currentUserListeCallBack}/>
-                                </TabPanel>
-                                {getOtherUsers().map(otherUser =>
-                                    <TabPanel value={otherUser.id}>
-                                    <OtherListePage user={otherUser} currentList={otherUsersList} isListOwner={false} updateCB={otherUserListeCallBack}/>
-                                    </TabPanel>
-                                )}
-                            </Box>
-                        </TabContext>
-                    </Box>
-                )}
-        </>
-    )
+        <Box sx={{display: "flex"}}>
+            <CssBaseline/>
+            <AppBar position="fixed" sx={{width: {sm: `calc(100% - ${drawerWidth}px)`}, ml: {sm: `${drawerWidth}px`}}}>
+                <Toolbar>
+                    <IconButton color="inherit" edge="start" sx={{mr: 2, display: {sm: "none"}}}
+                                onClick={() => setMobileOpen(prev => !prev)}>
+                        <MenuIcon/>
+                    </IconButton>
+                    <PersonIcon/> {user.name}
+                    <Button sx={{ml: 3}} variant="contained" onClick={onLogout}>Me déconnecter</Button>
+                </Toolbar>
+            </AppBar>
+
+            <Box component="nav" sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}>
+                <Drawer variant="temporary" open={mobileOpen} onClose={() => setMobileOpen(false)}
+                        sx={{display: {xs: "block", sm: "none"}, '& .MuiDrawer-paper': {width: drawerWidth}}}>
+                    {drawer}
+                </Drawer>
+                <Drawer variant="permanent"
+                        sx={{display: {xs: "none", sm: "block"}, '& .MuiDrawer-paper': {width: drawerWidth}}} open>
+                    {drawer}
+                </Drawer>
+            </Box>
+
+            <Box component="main" sx={{flexGrow: 1, p: 1, width: {sm: `calc(100% - ${drawerWidth}px)`}}}>
+                <Toolbar/>
+                <OtherListePage
+                    user={selectedMenuUserId === user.id ? user : allUsers.find(u => u.id === selectedMenuUserId)}
+                    currentList={selectedMenuUserId === user.id ? currentUserList : otherUsersList.filter(l => l.userId === selectedMenuUserId)}
+                    updateCB={selectedMenuUserId === user.id ? currentUserListeCallBack : otherUserListeCallBack}
+                    isListOwner={selectedMenuUserId === user.id}
+                />
+            </Box>
+        </Box>
+    );
 }
