@@ -6,6 +6,7 @@ export const onRequestGet = async ({ request, env }) => {
     return Response.json(results);
 }
 
+// unused
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);

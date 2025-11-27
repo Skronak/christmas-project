@@ -66,7 +66,6 @@ export async function onRequestPut({request, env}) {
         return new Response(JSON.stringify({message: "Not found or unauthorized"}), {status: 404});
     }
 
-    // Préparation des champs à mettre à jour
     const columns = Object.keys(fieldsToUpdate);
     if (columns.length === 0) {
         return new Response(JSON.stringify({message: "No fields to update"}), {status: 400});
@@ -74,7 +73,6 @@ export async function onRequestPut({request, env}) {
 
     const placeholders = columns.map(col => `${col} = ?`).join(", ");
 
-    // Exécution du UPDATE
     const stmt = env.DB.prepare(`UPDATE liste SET ${placeholders} WHERE id = ? AND userId = ?`
     );
 
