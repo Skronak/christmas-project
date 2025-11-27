@@ -1,5 +1,4 @@
-name = "noel"
-main = "function/index.js"
+name = "projet-noel"
 compatibility_date = "2025-11-24"
 
 d1_databases = [

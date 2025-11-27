@@ -1,5 +1,5 @@
 import React from 'react'
-import UserDropdown from "../../comments/UserDropdown";
+import UserDropdown from "../components/UserDropdown";
 import {Grid, Typography} from "@mui/material";
 import {ScrambledTitle} from "../components/ScrambledTitle";
 import {allUsers} from "../utils/data";
