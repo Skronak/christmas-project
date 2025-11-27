@@ -5,4 +5,4 @@ pages_build_output_dir = "./dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "noel"
-database_id = "generated-uuid-5678"
+database_id = "740542a1-634d-49c2-a516-8c8d699a601f"
