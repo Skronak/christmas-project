@@ -6,7 +6,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CustomTableCell from "./CustomTableCell";
 
-export default function RowOther({ item, onSubmit, onDelete, isOwner }) {
+export default function Row({ item, onSubmit, onDelete, isOwner }) {
     const [isEdit, setIsEdit] = useState(false);
     const [row, setRow] = useState(item);
 

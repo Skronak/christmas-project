@@ -11,10 +11,10 @@ import {
     Paper,
     TableRow
 } from "@mui/material";
-import RowOther from "../components/RowOther";
+import Row from "../components/Row";
 import {addItem, deleteItem, updateItems} from "../api";
 
-export default function OtherListePage({ user, currentList, updateCB, isListOwner }) {
+export default function ListePage({ user, currentList, updateCB, isListOwner }) {
     const [name, setName] = useState("");
     const [comment, setComment] = useState("");
     const [currentItems, setCurrentItems] = useState(currentList ?? []);
@@ -68,7 +68,7 @@ export default function OtherListePage({ user, currentList, updateCB, isListOwne
                     </TableHead>
                     <TableBody>
                         {currentItems.map(item => (
-                            <RowOther
+                            <Row
                                 key={item.id}
                                 item={item}
                                 onSubmit={handleSubmit}

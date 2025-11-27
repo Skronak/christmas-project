@@ -1,11 +1,12 @@
 export const allUsers = [
-    {id: 1, name: 'Guillaume'},
-    {id: 2, name: 'Mireille'},
-    {id: 3, name: 'Gilles'},
     {id: 4, name: 'Aurelie'},
-    {id: 5, name: 'Fred'},
     {id: 6, name: 'Arthur'},
+    {id: 5, name: 'Fred'},
     {id: 7, name: 'Gabriel'},
+    {id: 3, name: 'Gilles'},
+    {id: 1, name: 'Guillaume'},
+    {id: 8, name: 'Julie'},
+    {id: 2, name: 'Mireille'},
     {id: 8, name: 'Maman Fred'}];
 
 export const itemMock = [

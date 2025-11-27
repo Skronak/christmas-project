@@ -11,7 +11,7 @@ export async function loginByName(name) {
     })
     if (!res.ok) {
         const err = await res.json().catch(() => ({}))
-        throw new Error(err.message || 'Login failed')
+        throw new Error(err.message || 'LoginPage failed')
     }
     return res.json()
 }

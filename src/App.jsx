@@ -1,5 +1,5 @@
 import React from 'react'
-import Login from './pages/Login'
+import LoginPage from './pages/LoginPage'
 import {Box} from "@mui/material";
 import MainLayout from "./pages/MainLayout";
 
@@ -19,7 +19,7 @@ function App() {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            {!user ? <Login onLogin={setUser}/> : (
+            {!user ? <LoginPage onLogin={setUser}/> : (
                 <MainLayout user={user} onLogout={() => setUser(null)}/>)
             }
         </Box>

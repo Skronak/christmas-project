@@ -12,7 +12,7 @@ import {
     ListItemIcon,
     ListItemText,
     Divider,
-    Button
+    Button,Typography
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-import OtherListePage from "./OtherListePage";
+import ListePage from "./ListePage";
 import {allUsers, drawerWidth, itemMock} from "../utils/data";
 import {exportToCSV} from "../utils/export";
 import {getItems} from "../api";
@@ -75,6 +75,7 @@ export default function MainLayout({user, onLogout}) {
                         <ListItemButton onClick={() => setSelectedMenuUserId(u.id)}>
                             <ListItemIcon><RedeemIcon/></ListItemIcon>
                             <ListItemText primary={u.name}/>
+                            <Typography sx={{color:"rgb(141, 146, 153)", width:"1em",textAlign:"center"}}>{otherUsersList.filter(l=>l.userId===u.id).length}</Typography>
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -109,7 +110,7 @@ export default function MainLayout({user, onLogout}) {
 
             <Box component="main" sx={{flexGrow: 1, p: 1, width: {sm: `calc(100% - ${drawerWidth}px)`}}}>
                 <Toolbar/>
-                <OtherListePage
+                <ListePage
                     user={selectedMenuUserId === user.id ? user : allUsers.find(u => u.id === selectedMenuUserId)}
                     currentList={selectedMenuUserId === user.id ? currentUserList : otherUsersList.filter(l => l.userId === selectedMenuUserId)}
                     updateCB={selectedMenuUserId === user.id ? currentUserListeCallBack : otherUserListeCallBack}

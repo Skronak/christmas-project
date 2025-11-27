@@ -6,7 +6,7 @@ import {allUsers} from "../utils/data";
 import {loginByName} from "../api";
 import backgroundImg from "../images/NoelRock.png";
 
-export default function Login({onLogin}) {
+export default function LoginPage({onLogin}) {
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(null)
 
