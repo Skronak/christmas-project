@@ -19,7 +19,8 @@
     "dev": "vite",
     "build": "vite build",
     "wrangler": "npm run build &&  wrangler pages dev ./dist",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "wrangler pages deploy ./dist --project-name='projet-noel'"
   },
   "dependencies": {
     "@emotion/react": "~11.14.0",
