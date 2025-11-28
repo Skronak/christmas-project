@@ -19,7 +19,8 @@ export async function loginByName(name) {
 export async function getItems() {
     const res = await fetch(`${apiBase}/items`)
     if (!res.ok) throw new Error('Failed to load items')
-    return res.json()
+    return res.json();
+    // return itemMock;
 }
 
 export async function addItem(userId, name, comment) {

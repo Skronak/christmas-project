@@ -1,4 +1,4 @@
-create table IF NOT EXISTS  users (id INTEGER primary key, name text);
+create table IF NOT EXISTS users (id INTEGER primary key, name text);
 
 CREATE TABLE IF NOT EXISTS liste (
                                      id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,8 +14,8 @@ INSERT OR IGNORE INTO users(id, name) VALUES
 (2, 'Mireille'),
 (3, 'Gilles'),
 (4, 'Aurelie'),
-(5, 'Fred');
-(6, 'Arthur');
+(5, 'Fred'),
+(6, 'Arthur'),
 (7, 'Gabriel');
 
 -- Quelques todos exemples

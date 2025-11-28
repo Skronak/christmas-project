@@ -9,7 +9,7 @@ import {
     TableContainer,
     TableHead,
     Paper,
-    TableRow
+    TableRow, Stack
 } from "@mui/material";
 import Row from "../components/Row";
 import {addItem, deleteItem, updateItems} from "../api";
@@ -39,24 +39,27 @@ export default function ListePage({ user, currentList, updateCB, isListOwner }) 
     };
 
     const handleSubmit = async (item) => {
-        const updatedItem = await updateItems(item);
-        const updated = currentItems.map(i => i.id === updatedItem.id ? updatedItem : i);
-        setCurrentItems(updated);
-        updateCB(updated);
+        await updateItems(item);
+        updateCB(currentItems);
     };
 
     return (
         <>
-            {isListOwner && (
-                <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-                    <TextField size="small" label="Nom" value={name} onChange={e => setName(e.target.value)} />
-                    <TextField size="small" label="Commentaire" value={comment} onChange={e => setComment(e.target.value)} />
-                    <Button variant="contained" onClick={handleAdd}>Ajouter</Button>
-                </Box>
-            )}
             <h2>Liste de {user.name}</h2>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }}>
+            {isListOwner && (
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={2}
+                    sx={{ width: '100%' }}
+                >
+                    <TextField size="small" label="Nom" value={name} onChange={e => setName(e.target.value)}/>
+                    <TextField size="small" label="Commentaire" value={comment}
+                               onChange={e => setComment(e.target.value)}/>
+                    <Button variant="contained" onClick={handleAdd}>Ajouter</Button>
+                </Stack>
+            )}
+            <TableContainer component={Paper} sx={{ overflowX: 'auto', width: '100%' }}>
+                <Table sx={{minWidth: 650}}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Nom</TableCell>
@@ -74,6 +77,7 @@ export default function ListePage({ user, currentList, updateCB, isListOwner }) 
                                 onSubmit={handleSubmit}
                                 onDelete={handleDelete}
                                 isOwner={isListOwner}
+                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
                             />
                         ))}
                     </TableBody>

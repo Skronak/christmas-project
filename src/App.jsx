@@ -17,12 +17,11 @@ function App() {
         else localStorage.removeItem('user')
     }, [user])
 
-    return (
-        <Box sx={{flexGrow: 1}}>
+    return (<>
             {!user ? <LoginPage onLogin={setUser}/> : (
                 <MainLayout user={user} onLogout={() => setUser(null)}/>)
             }
-        </Box>
+        </>
     )
 }
 

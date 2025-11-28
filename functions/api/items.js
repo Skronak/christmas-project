@@ -12,18 +12,15 @@ export const onRequestGet = async ({env}) => {
 
 export const onRequestPost = async ({request, env}) => {
     try {
-        console.log(request);
         const body = await request.json()
         const {userId, name, comment} = body || {}
         if (!userId || !name) return new Response(JSON.stringify({message: 'userId and text required'}), {status: 400})
 
         const stmt = env.DB.prepare('INSERT INTO liste(userId, name, comment) VALUES (?, ?, ?)')
         const result = await stmt.bind(userId, name, comment).run();
-
-        return new Response(JSON.stringify({id: result.lastRowId, userId, name}), {status: 201})
+        return new Response(JSON.stringify({id: result.meta.last_row_id, userId, name, comment}), {status: 201})
     } catch (err) {
         console.log(err);
-
         return new Response(JSON.stringify({message: err.message}), {status: 500})
     }
 }
@@ -55,8 +52,7 @@ export async function onRequestPut({request, env}) {
     const body = await request.json();
     const {id, userId, ...fieldsToUpdate} = body;
 
-    if (!id || !userId) {return new Response(JSON.stringify({message: "id and userId are required"}), {status: 400});
-    }
+    if (!id || !userId) {return new Response(JSON.stringify({message: "id and userId are required"}), {status: 400});}
 
     // Vérifier que l’item existe et appartient à l’utilisateur
     const check = await env.DB.prepare("SELECT id FROM liste WHERE id = ? AND userId = ?")
