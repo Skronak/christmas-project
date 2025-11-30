@@ -11,7 +11,6 @@ export default function UserDropdown({ userList, onSelect }) {
         <TextField
             id="select-user"
             select
-            sx={{width:"100%"}}
             label="Selectionner une valeur"
             onChange={handleChange}
             slotProps={{

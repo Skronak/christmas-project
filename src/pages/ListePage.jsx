@@ -9,6 +9,7 @@ import {
     TableContainer,
     TableHead,
     Paper,
+    Divider,
     TableRow, Stack
 } from "@mui/material";
 import Row from "../components/Row";
@@ -50,10 +51,10 @@ export default function ListePage({ user, currentList, updateCB, isListOwner }) 
                 <Stack
                     direction={{ xs: 'column', sm: 'row' }}
                     spacing={2}
-                    sx={{ width: '100%' }}
+                    sx={{ width: '100%', paddingBottom: '1em' }}
                 >
                     <TextField size="small" label="Nom" value={name} onChange={e => setName(e.target.value)}/>
-                    <TextField size="small" label="Commentaire" value={comment}
+                    <TextField  size="small" multiline label="Commentaire" value={comment}
                                onChange={e => setComment(e.target.value)}/>
                     <Button variant="contained" onClick={handleAdd}>Ajouter</Button>
                 </Stack>

@@ -120,6 +120,15 @@ export default function MainLayout({user, onLogout}) {
         }),
     );
 
+    const getFirstLetterName =(name)=> {
+        console.log(getOtherUsers());
+        return getOtherUsers().filter(u=>u.name[0]===name[0]).length >1 ? name[0]+name[1]:name[0];
+   }
+
+   const getNumberColor = (userId)=>{
+       return otherUsersList.filter(l => l.userId === userId).length>0 ? 'red': "rgb(141, 146, 153)"
+   }
+
     const drawerElement = (
         <>
             <List>
@@ -133,10 +142,10 @@ export default function MainLayout({user, onLogout}) {
                 {getOtherUsers().map(u => (
                     <ListItem key={u.id} disablePadding>
                         <ListItemButton onClick={() => setSelectedMenuUserId(u.id)}>
-                            <ListItemIcon><RedeemIcon/></ListItemIcon>
+                            <ListItemIcon>{!open?getFirstLetterName(u.name):<RedeemIcon>u.name</RedeemIcon>}</ListItemIcon>
                             <ListItemText primary={u.name}/>
                             <Typography sx={{
-                                color: "rgb(141, 146, 153)",
+                                color:getNumberColor(u.id),
                                 width: "1em",
                                 textAlign: "center"
                             }}>{otherUsersList.filter(l => l.userId === u.id).length}</Typography>

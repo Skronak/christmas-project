@@ -35,7 +35,7 @@ export default function Row({ item, onSubmit, onDelete, isOwner }) {
             <CustomTableCell onChange={handleChange} name="name" value={row.name} isEdit={isOwner && isEdit} />
             <CustomTableCell onChange={handleChange} name="comment" value={row.comment} isEdit={isOwner && isEdit} />
             {!isOwner && <CustomTableCell onChange={handleChange} name="done" value={row.done} isEdit={isEdit} />}
-            {!isOwner && <CustomTableCell onChange={handleChange} name="doneComment" value={row.doneComment} isEdit={isEdit} />}
+            {!isOwner && <CustomTableCell multiligne onChange={handleChange} name="doneComment" label="Commentaire" value={row.doneComment} isEdit={isEdit} />}
             <TableCell style={{ width: 120 }}>
                 {isEdit ? (
                     <ButtonGroup>

@@ -17,7 +17,6 @@ const texts = [
     "↓↓↓↓↓",
     "L'animation est terminé il faut partir...",
     "[...]",
-    "Pourquoi les gens ne partent pas?",
     "Il n'y a plus rien après",
     "OH MON DIEU DERRIERE TOI !! ",
     "Je t'ai eu, je boucle !"
@@ -41,7 +40,5 @@ export const ScrambledTitle = () => {
         },
     })
 
-    return index===12? (
-        <h1 className="intro" aria-label={texts[index]} ref={ref} onClick={replay}/>):(
-        <p className="intro" aria-label={texts[index]} ref={ref} onClick={replay} />)
+    return  <p className="intro" aria-label={texts[index]} ref={ref} onClick={replay} />
 }

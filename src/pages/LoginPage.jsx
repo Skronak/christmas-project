@@ -1,6 +1,6 @@
 import React from 'react'
 import UserDropdown from "../components/UserDropdown";
-import {Grid, Typography} from "@mui/material";
+import {Grid, Divider, Typography, Card} from "@mui/material";
 import {ScrambledTitle} from "../components/ScrambledTitle";
 import {allUsers} from "../utils/data";
 import {loginByName} from "../api";
@@ -22,6 +22,14 @@ export default function LoginPage({onLogin}) {
         } finally {
             setLoading(false)
         }
+    }
+
+    const getUpdate = () => {
+        return ["30/11/2025 - Saisie multiligne sur commentaire ajout",
+            "30/11/2025 - Amélioration légère UI",
+            "30/11/2025 - Ajout multiligne sur commentaire ajout",
+            "30/11/2025 - Menu: Affichage premieres lettres du prénom en mode replié"]
+
     }
 
     return (
@@ -46,14 +54,22 @@ export default function LoginPage({onLogin}) {
             <h1>
                 <ScrambledTitle/>
             </h1>
-            <Grid container flex={8} flexDirection={"column"} alignItems={"center"}>
-                <h2>Je suis</h2>
-                <form onSubmit={handleSubmit}>
-                    {loading && <p>Connexion... </p>}
-                    {error && <p style={{color: 'red'}}>{error}</p>}
-                    <UserDropdown userList={allUsers} onSelect={handleSubmit}></UserDropdown>
-                </form>
-            </Grid>
+            <h2>Je suis</h2>
+            <form onSubmit={handleSubmit}>
+                {loading && <p>Connexion... </p>}
+                {error && <p style={{color: 'red'}}>{error}</p>}
+                <UserDropdown userList={allUsers} onSelect={handleSubmit}></UserDropdown>
+                <Divider sx={{paddingTop: "2em"}}/>
+                <Card>
+                    <Typography>Updates:</Typography>
+                    <Typography sx={{maxWidth: "25em"}}>
+                        {getUpdate().map(update => {
+                                return <Typography>{update}</Typography>
+                            }
+                        )}
+                    </Typography>
+                </Card>
+            </form>
         </Grid>
     )
 }
