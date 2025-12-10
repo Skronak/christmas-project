@@ -57,7 +57,15 @@ export default function MainLayout({user, onLogout}) {
     }, [user.id]);
 
     const currentUserListeCallBack = list => setCurrentUserList(list);
-    const otherUserListeCallBack = list => setOtherUsersList(list);
+    const otherUserListeCallBack = (user, list) => {
+        const updatedOtherList = otherUsersList.map(e => {
+            if (list.some(({ id }) => id === e.id)) {
+                return list.find(({ id }) => id === e.id);
+            }
+            return e;
+        });
+        setOtherUsersList(replacedItems);
+    }
     const getOtherUsers = () => allUsers.filter(u => u.id !== user.id);
 
     const openedMixin = (theme) => ({
