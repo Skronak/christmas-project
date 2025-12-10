@@ -24,7 +24,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import RedeemIcon from "@mui/icons-material/Redeem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import ListePage from "./ListePage";
 import {allUsers, drawerWidth, itemMock} from "../utils/data";
@@ -40,7 +39,6 @@ export default function MainLayout({user, onLogout}) {
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const menuOpen = Boolean(anchorEl);
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     useEffect(() => {
         getItems().then(
@@ -213,7 +211,7 @@ export default function MainLayout({user, onLogout}) {
                 {drawerElement}
             </Drawer>
 
-            <Box component="main" sx={{ width: isMobile ? `calc(100% - ${drawerWidth}px)` : "100%", flexGrow: 1, p: 3}}>
+            <Box component="main" sx={{ width: `calc(100% - ${drawerWidth}px)`, flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
                 <ListePage
                     user={selectedMenuUserId === user.id ? user : allUsers.find(u => u.id === selectedMenuUserId)}
