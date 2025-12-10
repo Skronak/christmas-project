@@ -126,16 +126,19 @@ export default function MainLayout({user, onLogout}) {
         }),
     );
 
-    const getFirstLetterName =(name)=> {
-        console.log(getOtherUsers());
-        return getOtherUsers().filter(u=>u.name[0]===name[0]).length >1 ? name[0]+name[1]:name[0];
+    const getFirstLetterName =(user)=> {
+        let userWithSameName = getOtherUsers().filter(u=>u.name[0]===user.name[0]);
+        return userWithSameName.length >1 ? user.name[0]+user.name[1]:user.name[0];
    }
 
    const getNumberColor = (userId)=>{
        return otherUsersList.filter(l => l.userId === userId).length>0 ? 'red': "rgb(141, 146, 153)"
    }
 
-    const drawerElement = (
+    function getListCount(u) {
+        return otherUsersList.filter(l => l.userId === u.id).length;
+    }
+        const drawerElement = (
         <>
             <List>
                 <ListItemButton onClick={() => setSelectedMenuUserId(user.id)}>
@@ -148,13 +151,13 @@ export default function MainLayout({user, onLogout}) {
                 {getOtherUsers().map(u => (
                     <ListItem key={u.id} disablePadding>
                         <ListItemButton onClick={() => setSelectedMenuUserId(u.id)}>
-                            <ListItemIcon>{!open?getFirstLetterName(u.name):<RedeemIcon>u.name</RedeemIcon>}</ListItemIcon>
+                            <ListItemIcon>{!open ? <div>{getFirstLetterName(u)}<div style={{position: "absolute", bottom: "0",left: "2.5em"}}>{getListCount(u)}</div></div> : <RedeemIcon>u.name</RedeemIcon>}</ListItemIcon>
                             <ListItemText primary={u.name}/>
                             <Typography sx={{
-                                color:getNumberColor(u.id),
+                                color: getNumberColor(u.id),
                                 width: "1em",
                                 textAlign: "center"
-                            }}>{otherUsersList.filter(l => l.userId === u.id).length}</Typography>
+                            }}>{getListCount(u)}</Typography>
                         </ListItemButton>
                     </ListItem>
                 ))}
